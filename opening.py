@@ -13,7 +13,20 @@ def landing():
 
 @app.route('/compare')
 def compare_data():
-    return render_template("index.html")
+    tables = ['Births', 'Deaths']
+    result = []
+    if request.args:
+        # TODO: compare over other slices instead of just year ?
+        # overlap with aggregation page?
+        tables = request.args.getlist("table")
+        print(tables)
+        for table in tables:
+            print(table)
+            queryval = "select sum(count), year from " + table.lower() + " group by year"
+            print(queryval)
+            result.append({table : db.query(connection, queryval)})
+        print(result)
+    return render_template("compare.html", data=tables, result=result)
 
 
 @app.route('/slice/<category>')
@@ -48,11 +61,3 @@ def slicendice(category):
 @app.route('/agg')
 def aggregate():
     return render_template("index.html")
-
-
-@app.route('/births')
-def births():
-    constructed_query = "SELECT count(*) FROM births"
-    values = db.query(connection, constructed_query)
-    print (values)
-    return print(values[0])
