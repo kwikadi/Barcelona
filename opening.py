@@ -14,13 +14,50 @@ def getRandomColor():
 @app.route('/')
 def landing():
     return render_template("index.html")
+# 'Births', 'Deaths', 'Accidents', 'Immigrants', 'Population', 'Unemployment'
 
 
 @app.route('/compare')
 def compare_data():
     tables = ['Births', 'Deaths', 'Accidents', 'Immigrants', 'Population', 'Unemployment']
+    deaths_col = ["year","district_name","neighborhood_name","age"]
+    births_col = ["year","district_name","neighborhood_name","gender"]
+    acc_col = ["district_name", "neighborhood_name", "street"]
+    imm_col = ["year","district_name", "neighborhood_name", "nationality"]
+    pop_col = ["year","district_name", "neighborhood_name", "gender", "age"]
+    une_col = ["year", "district_name", "neighborhood_name", "gender", "demand_occupation"]
     result = []
     years = [2013, 2014, 2015, 2016, 2017]
+    dropdown_deaths = []
+    dropdown_births = []
+    dropdown_acc = []
+    dropdown_imm = []
+    dropdown_pop = []
+    dropdown_une = []
+    for field in deaths_col:
+        inter_data = db.query(connection, "select distinct(" + field + ") from deaths_v order by " + field )
+        mapped_data = list(map(lambda x: x[0], inter_data))
+        dropdown_deaths.append({field: mapped_data})
+    for field in births_col:
+        inter_data = db.query(connection, "select distinct(" + field + ") from births_v order by " + field )
+        mapped_data = list(map(lambda x: x[0], inter_data))
+        dropdown_births.append({field: mapped_data})
+    for field in acc_col:
+        inter_data = db.query(connection, "select distinct(" + field + ") from accidents_v order by " + field )
+        mapped_data = list(map(lambda x: x[0], inter_data))
+        dropdown_acc.append({field: mapped_data})
+    for field in imm_col:
+        inter_data = db.query(connection, "select distinct(" + field + ") from immigrants_by_nationality_v order by " + field )
+        mapped_data = list(map(lambda x: x[0], inter_data))
+        dropdown_imm.append({field: mapped_data})
+    for field in pop_col:
+        inter_data = db.query(connection, "select distinct(" + field + ") from population_v order by " + field )
+        mapped_data = list(map(lambda x: x[0], inter_data))
+        dropdown_pop.append({field: mapped_data})
+    for field in une_col:
+        inter_data = db.query(connection, "select distinct(" + field + ") from unemployment_v order by " + field )
+        mapped_data = list(map(lambda x: x[0], inter_data))
+        dropdown_une.append({field: mapped_data})
     if request.args:
         # TODO: compare over other slices instead of just year ?
         # overlap with aggregation page?
@@ -47,7 +84,9 @@ def compare_data():
         print(str(json.dumps(result)))
             # result.append({table : db.query(connection, queryval)})
         
-    return render_template("compare.html", data=tables, result=json.dumps(result), labels=years)
+    return render_template("compare.html", data=tables, result=json.dumps(result), labels=years,
+                            dropdown_deaths=dropdown_deaths, dropdown_acc=dropdown_acc, dropdown_births=dropdown_births,
+                            dropdown_imm=dropdown_imm, dropdown_pop=dropdown_pop, dropdown_une=dropdown_une)
 
 
 @app.route('/slice/<category>')

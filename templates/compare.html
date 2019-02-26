@@ -81,7 +81,92 @@
           {% endfor %}
         </select>
       <button type="button" class="btn btn-sm btn-outline-primary" onclick="compare()">Go</button>
-      <br><br><br><br>
+      <br><br>
+
+      <div class="une-drop">
+          <h5>Unemployment:</h5>
+          {% for field in dropdown_une %}
+            {% for key, val in field.items() %}
+            <select class="select2-une-{{key}}" id="une-{{key}}" name="{{key}}[]" multiple="multiple">
+              {% for value in val %}
+                <option value="{{value}}">{{value}}</option>
+              {% endfor %}
+            </select>
+            {% endfor %}
+          {% endfor %}
+        </div>
+        <br><br>
+
+      <div class="pop-drop">
+          <h5>Population:</h5>
+          {% for field in dropdown_pop %}
+            {% for key, val in field.items() %}
+            <select class="select2-pop-{{key}}" id="pop-{{key}}" name="{{key}}[]" multiple="multiple">
+              {% for value in val %}
+                <option value="{{value}}">{{value}}</option>
+              {% endfor %}
+            </select>
+            {% endfor %}
+          {% endfor %}
+        </div>
+        <br><br>
+
+      <div class="imm-drop">
+          <h5>Immigrants:</h5>
+          {% for field in dropdown_imm %}
+            {% for key, val in field.items() %}
+            <select class="select2-imm-{{key}}" id="imm-{{key}}" name="{{key}}[]" multiple="multiple">
+              {% for value in val %}
+                <option value="{{value}}">{{value}}</option>
+              {% endfor %}
+            </select>
+            {% endfor %}
+          {% endfor %}
+        </div>
+        <br><br>
+
+      <div class="acc-drop">
+          <h5>Accidents:</h5>
+          {% for field in dropdown_acc %}
+            {% for key, val in field.items() %}
+            <select class="select2-acc-{{key}}" id="acc-{{key}}" name="{{key}}[]" multiple="multiple">
+              {% for value in val %}
+                <option value="{{value}}">{{value}}</option>
+              {% endfor %}
+            </select>
+            {% endfor %}
+          {% endfor %}
+        </div>
+        <br><br>
+
+      <div class="births-drop">
+        <h5>Births:</h5>
+        {% for field in dropdown_births %}
+          {% for key, val in field.items() %}
+          <select class="select2-births-{{key}}" id="births-{{key}}" name="{{key}}[]" multiple="multiple">
+            {% for value in val %}
+              <option value="{{value}}">{{value}}</option>
+            {% endfor %}
+          </select>
+          {% endfor %}
+        {% endfor %}
+      </div>
+      <br><br>
+
+      <div class="deaths-drop">
+        <h5>Deaths:</h5>
+        {% for field in dropdown_deaths %}
+          {% for key, val in field.items() %}
+          <select class="select2-deaths-{{key}}" id="deaths-{{key}}" name="{{key}}[]" multiple="multiple">
+            {% for value in val %}
+              <option value="{{value}}">{{value}}</option>
+            {% endfor %}
+          </select>
+          {% endfor %}
+        {% endfor %}
+      </div>
+      <br><br>
+
       {% if result %}
       <div>
         <canvas id="myChart" width="1000" height="500"></canvas>
