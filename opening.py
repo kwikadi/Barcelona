@@ -14,7 +14,6 @@ def getRandomColor():
 @app.route('/')
 def landing():
     return render_template("index.html")
-# 'Births', 'Deaths', 'Accidents', 'Immigrants', 'Population', 'Unemployment'
 
 
 @app.route('/compare')
@@ -65,20 +64,138 @@ def compare_data():
         for table in tables_show:
             # print(table)
             if table == "Accidents":
-                queryval = "select count(*), extract(year from acc_date) as year from accidents group by extract(year from acc_date) order by year asc"
+                queryval = "select count(*), extract(year from acc_date) as year from accidents where "
+                acc1 = request.args.getlist("acc1")
+                if acc1:
+                    bracket_value = (', '.join("'" + item + "'" for item in acc1))
+                    queryval += "district_name in (" + bracket_value + ") and"
+                acc2 = request.args.getlist("acc2")
+                if acc2:
+                    bracket_value = (', '.join("'" + item + "'" for item in acc2))
+                    queryval += "neighborhood_name in (" + bracket_value + ") and"
+                acc3 = request.args.getlist("acc3")
+                if acc3:
+                    bracket_value = (', '.join("'" + item + "'" for item in acc3))
+                    queryval += "street in (" + bracket_value + ") and"
+                queryval += " 1=1 group by extract(year from acc_date) order by year asc"
             elif table == "Immigrants":
-                queryval = "select sum(count), year from immigrants_by_nationality group by year order by year asc"
-            else:
-                queryval = "select sum(count), year from " + table.lower() + " group by year order by year asc"
+                queryval = "select sum(count), year from immigrants_by_nationality_v where "
+                imm1 = request.args.getlist("imm1")
+                if imm1:
+                    bracket_value = (', '.join("'" + item + "'" for item in imm1))
+                    queryval += "year in (" + bracket_value + ") and"
+                imm2 = request.args.getlist("imm2")
+                if imm2:
+                    bracket_value = (', '.join("'" + item + "'" for item in imm2))
+                    queryval += "district_name in (" + bracket_value + ") and"
+                imm3 = request.args.getlist("imm3")
+                if imm3:
+                    bracket_value = (', '.join("'" + item + "'" for item in imm3))
+                    queryval += "neighborhood_name in (" + bracket_value + ") and"
+                imm4 = request.args.getlist("imm4")
+                if imm4:
+                    bracket_value = (', '.join("'" + item + "'" for item in imm4))
+                    queryval += "nationality in (" + bracket_value + ") and"
+                queryval += " 1=1 group by year order by year asc"
+
+            elif table == "Births":
+                queryval = "select sum(count), year from " + table.lower() + "_v where "
+                births1 = request.args.getlist("births1")
+                if births1:
+                    bracket_value = (', '.join("'" + item + "'" for item in births1))
+                    queryval += "year in (" + bracket_value + ") and"
+                births2 = request.args.getlist("births2")
+                if births2:
+                    bracket_value = (', '.join("'" + item + "'" for item in births2))
+                    queryval += "district_name in (" + bracket_value + ") and"
+                births3 = request.args.getlist("births3")
+                if births3:
+                    bracket_value = (', '.join("'" + item + "'" for item in births3))
+                    queryval += "neighborhood_name in (" + bracket_value + ") and"
+                births4 = request.args.getlist("births4")
+                if births4:
+                    bracket_value = (', '.join("'" + item + "'" for item in births4))
+                    queryval += "gender in (" + bracket_value + ") and"
+                queryval += " 1=1 group by year order by year asc"
+            elif table == "Deaths":
+                queryval = "select sum(count), year from " + table.lower() + "_v where "
+                deaths1 = request.args.getlist("deaths1")
+                if deaths1:
+                    bracket_value = (', '.join("'" + item + "'" for item in deaths1))
+                    queryval += "year in (" + bracket_value + ") and"
+                deaths2 = request.args.getlist("deaths2")
+                if deaths2:
+                    bracket_value = (', '.join("'" + item + "'" for item in deaths2))
+                    queryval += "district_name in (" + bracket_value + ") and"
+                deaths3 = request.args.getlist("deaths3")
+                if deaths3:
+                    bracket_value = (', '.join("'" + item + "'" for item in deaths3))
+                    queryval += "neighborhood_name in (" + bracket_value + ") and"
+                deaths4 = request.args.getlist("deaths4")
+                if deaths4:
+                    bracket_value = (', '.join("'" + item + "'" for item in deaths4))
+                    queryval += "gender in (" + bracket_value + ") and"
+                queryval += " 1=1 group by year order by year asc"
+            elif table == "Population":
+                queryval = "select sum(count), year from " + table.lower() + "_v where "
+                pop1 = request.args.getlist("pop1")
+                if pop1:
+                    bracket_value = (', '.join("'" + item + "'" for item in pop1))
+                    queryval += "year in (" + bracket_value + ") and"
+                pop2 = request.args.getlist("pop2")
+                if pop2:
+                    bracket_value = (', '.join("'" + item + "'" for item in pop2))
+                    queryval += "district_name in (" + bracket_value + ") and"
+                pop3 = request.args.getlist("pop3")
+                if pop3:
+                    bracket_value = (', '.join("'" + item + "'" for item in pop3))
+                    queryval += "neighborhood_name in (" + bracket_value + ") and"
+                pop4 = request.args.getlist("pop4")
+                if pop4:
+                    bracket_value = (', '.join("'" + item + "'" for item in pop4))
+                    queryval += "gender in (" + bracket_value + ") and"
+                pop5 = request.args.getlist("pop5")
+                if pop5:
+                    bracket_value = (', '.join("'" + item + "'" for item in pop5))
+                    queryval += "age in (" + bracket_value + ") and"
+
+                queryval += " 1=1 group by year order by year asc"
+            elif table == "Unemployment":
+                queryval = "select sum(count), year from " + table.lower() + "_v where "
+                une1 = request.args.getlist("une1")
+                if une1:
+                    bracket_value = (', '.join("'" + item + "'" for item in une1))
+                    queryval += "year in (" + bracket_value + ") and"
+                une2 = request.args.getlist("une2")
+                if une2:
+                    bracket_value = (', '.join("'" + item + "'" for item in une2))
+                    queryval += "district_name in (" + bracket_value + ") and"
+                une3 = request.args.getlist("une3")
+                if une3:
+                    bracket_value = (', '.join("'" + item + "'" for item in une3))
+                    queryval += "neighborhood_name in (" + bracket_value + ") and"
+                une4 = request.args.getlist("une4")
+                if une4:
+                    bracket_value = (', '.join("'" + item + "'" for item in une4))
+                    queryval += "gender in (" + bracket_value + ") and"
+                une5 = request.args.getlist("une5")
+                if une5:
+                    bracket_value = (', '.join("'" + item + "'" for item in une5))
+                    queryval += "demand_occupation in (" + bracket_value + ") and"
+
+                queryval += " 1=1 group by year order by year asc"
             dbdata = db.query(connection, queryval)
             temp = {}
             temp["label"] = table
             temp["borderColor"] = getRandomColor()
             temp["fill"] = "false"
             temp["data"] = []
-            # print(dbdata[0])
-            for i in range(int(dbdata[0][1])-2013):
-                temp["data"].append("null")
+            # print(dbdata)
+            try:
+                for i in range(int(dbdata[0][1])-2013):
+                    temp["data"].append("null")
+            except:
+                pass
             temp["data"].extend([dbrow[0] for dbrow in dbdata])
             result.append(temp)
         print(str(json.dumps(result)))
