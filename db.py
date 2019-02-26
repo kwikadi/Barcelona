@@ -1,5 +1,5 @@
 import psycopg2
-
+import time
 
 def create_connection():
     try:
@@ -10,7 +10,11 @@ def create_connection():
     return None
 
 def query(conn, query):
+    print(query)
     cur = conn.cursor()
+    start_time = time.time()
     cur.execute(query)
+    stop_time = time.time()
     rows = cur.fetchall()
+    print("Time taken: ", str(stop_time - start_time), "seconds")
     return rows
