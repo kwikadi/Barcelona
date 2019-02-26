@@ -1,10 +1,15 @@
 from flask import Flask, render_template, request
 
 import db
+import random
+import json
 
 app = Flask(__name__)
 connection = db.create_connection()
 
+
+def getRandomColor():
+    return "#%06x" % random.randint(0, 0xFFFFFF)
 
 @app.route('/')
 def landing():
@@ -15,6 +20,7 @@ def landing():
 def compare_data():
     tables = ['Births', 'Deaths']
     result = []
+    years = [2013, 2014, 2015, 2016, 2017]
     if request.args:
         # TODO: compare over other slices instead of just year ?
         # overlap with aggregation page?
@@ -22,11 +28,22 @@ def compare_data():
         print(tables)
         for table in tables:
             print(table)
-            queryval = "select sum(count), year from " + table.lower() + " group by year"
-            print(queryval)
-            result.append({table : db.query(connection, queryval)})
-        print(result)
-    return render_template("compare.html", data=tables, result=result)
+            queryval = "select sum(count), year from " + table.lower() + " group by year order by year asc"
+            dbdata = db.query(connection, queryval)
+            temp = {}
+            temp["label"] = table
+            temp["borderColor"] = getRandomColor()
+            temp["fill"] = "false"
+            temp["data"] = []
+            # print(dbdata[0])
+            for i in range(dbdata[0][1]-2013):
+                temp["data"].append("null")
+            temp["data"].extend([dbrow[0] for dbrow in dbdata])
+            result.append(temp)
+        print(str(json.dumps(result)))
+            # result.append({table : db.query(connection, queryval)})
+        
+    return render_template("compare.html", data=tables, result=json.dumps(result), labels=years)
 
 
 @app.route('/slice/<category>')
