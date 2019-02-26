@@ -18,17 +18,21 @@ def landing():
 
 @app.route('/compare')
 def compare_data():
-    tables = ['Births', 'Deaths']
+    tables = ['Births', 'Deaths', 'Accidents', 'Immigrants', 'Population', 'Unemployment']
     result = []
     years = [2013, 2014, 2015, 2016, 2017]
     if request.args:
         # TODO: compare over other slices instead of just year ?
         # overlap with aggregation page?
-        tables = request.args.getlist("table")
-        print(tables)
-        for table in tables:
-            print(table)
-            queryval = "select sum(count), year from " + table.lower() + " group by year order by year asc"
+        tables_show = request.args.getlist("table")
+        for table in tables_show:
+            # print(table)
+            if table == "Accidents":
+                queryval = "select count(*), extract(year from acc_date) as year from accidents group by extract(year from acc_date) order by year asc"
+            elif table == "Immigrants":
+                queryval = "select sum(count), year from immigrants_by_nationality group by year order by year asc"
+            else:
+                queryval = "select sum(count), year from " + table.lower() + " group by year order by year asc"
             dbdata = db.query(connection, queryval)
             temp = {}
             temp["label"] = table
@@ -36,7 +40,7 @@ def compare_data():
             temp["fill"] = "false"
             temp["data"] = []
             # print(dbdata[0])
-            for i in range(dbdata[0][1]-2013):
+            for i in range(int(dbdata[0][1])-2013):
                 temp["data"].append("null")
             temp["data"].extend([dbrow[0] for dbrow in dbdata])
             result.append(temp)
