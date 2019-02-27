@@ -27,6 +27,20 @@ $('#column_dropdown_8').hide()
 $('#column_dropdown_9').hide()
 $('.kevin').hide()
 
+$(document).ready(function() {
+    $('#tables_dropdown').select2({
+        placeholder: "Select Table",
+        width: '20%'
+    });
+});
+
+$(document).ready(function() {
+    $('#operator_dropdown').select2({
+        placeholder: "Select Table",
+        width: '20%'
+    });
+});
+
 $('#tables_dropdown').change(function(){
 	var value = $('#tables_dropdown').val()
 
