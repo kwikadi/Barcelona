@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
     <meta name="generator" content="Jekyll v3.8.5">
-    <title>Dashboard Template · Bootstrap</title>
+    <title>Update Tables · Barcelona</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -43,132 +43,66 @@
       <div class="sidebar-sticky">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" href="/slice/accidents">
-              <span data-feather="home"></span>
-              Accidents <span class="sr-only"></span>
-            </a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="/slice/births">
               <span data-feather="file"></span>
-              Births
+              Slice
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/sllice/deaths">
+            <a class="nav-link" href="/compare">
               <span data-feather="shopping-cart"></span>
-              Deaths
+              Compare
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/slice/population">
+            <a class="nav-link" href="/agg">
               <span data-feather="users"></span>
-              Population
+              Aggregate
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/slice/unemployment">
-              <span data-feather="bar-chart-2"></span>
-              Unemployment
+            <a class="nav-link active" href="/agg">
+                <span data-feather="users"></span>
+                Update
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/slice/air_stations">
-              <span data-feather="layers"></span>
-              Air Stations
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/slice/bus_stops">
-              <span data-feather="layers"></span>
-              Bus Stops
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/slice/most_frequent_baby_names">
-              <span data-feather="layers"></span>
-              Most Frequent Baby Names
-            </a>
-          </li>
-          <li class="nav-item">
-              <a class="nav-link" href="/slice/most_frequent_names">
-                <span data-feather="layers"></span>
-                Most Frequent Names
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/slice/air_quality">
-                <span data-feather="layers"></span>
-                Air Quality
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/slice/transports">
-                <span data-feather="layers"></span>
-                Transport
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="/slice/immigrants_by_nationality">
-                <span data-feather="layers"></span>
-                Immigrants By Nationality
-              </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/slice/imm_emi_by_gender">
-                  <span data-feather="layers"></span>
-                  Immigrants and Emigrants By Gender
-                </a>
-              </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/slice/imm_emi_by_age">
-                    <span data-feather="layers"></span>
-                    Immigrants and Emigrants By Age
-                  </a>
-                </li>
+
         </ul>
       </div>
     </nav>
 
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Slice and Dice</h1>
+        <h1 class="h2">Update Table</h1>
       </div>
-
-      {% for field in data %}
-        {% for key, val in field.items() %}
-        <select class="select2-{{key}}" id="{{key}}" name="{{key}}[]" multiple="multiple">
-          {% for value in val %}
+        <select class="select2-update" id="update" name="update[]">
+          {% for value in tables %}
             <option value="{{value}}">{{value}}</option>
           {% endfor %}
         </select>
-        {% endfor %}
-      {% endfor %}
-      <button type="button" class="btn btn-sm btn-outline-primary" onclick="{{page}}()">Go</button>
-      <br>
-      <h2>Data</h2>
-      <div class="table-responsive">
+      <button type="button" class="btn btn-sm btn-outline-primary" onclick="changetable()">Go</button>
+      <br><br>
+
+    <div class="table-responsive" id="neighborhoods">
         <table class="table table-striped table-sm">
-          <thead>
+            <thead>
             <tr>
-            {% for datum in data %}
-            {% for key in datum.keys() %}
-              <th>{{key}}</th>
-            {% endfor %}
-            {% endfor %}
+                <th>Current Value</th>
+                <th>New Value</th>
+                <th>Update</th>
             </tr>
-          </thead>
-          <tbody>
-            {% for sample_row in sample %}
+            </thead>
+            <tbody>
+            {% for n_datum in table_data %}
             <tr>
-                {% for col in sample_row %}
-              <td>{{col}}</td>
-                {% endfor %}
+              <td id={{loop.index}}-original>{{n_datum}}</td>
+              <td><input type="text" class="form-control" id="{{loop.index}}-new"></td>
+              <td id={{loop.index}}-button><button type="button" class="btn btn-info" onClick="update({{loop.index}})">Update</button></td>
             </tr>
             {% endfor %}
-          </tbody>
+            </tbody>
         </table>
-      </div>
+    </div>
     </main>
   </div>
 </div>
@@ -176,8 +110,28 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
-<script src="/static/js/slice.js"></script>
+<script src="/static/js/update.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+<!-- <script src="/static/js/dashboard.js"></script> -->
+<script>
+var ctx = document.getElementById("myChart");
+var dataset_data = {{ result|safe }};
+var myLineChart = new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: {{labels}},
+    datasets: dataset_data
+  },
+  options: {
+    responsive: false,
+    elements: {
+      line: {
+          tension: 0, // disables bezier curves
+      }
+  }
+}
+});
+</script>
 </body>
 </html>

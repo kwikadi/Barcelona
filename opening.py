@@ -32,6 +32,28 @@ def login():
     else:
         return render_template('login.html')
 
+@app.route('/update/<tablename>')
+def update_data(tablename):
+    if request.args:
+        new_value = request.args.getlist("new")[0]
+        orig_value = request.args.getlist("orig")[0]
+        if tablename == "districts":
+            queryval = "update districts set district_name = \'" + new_value + "\' where district_name = \'" + orig_value + "\'"
+        else:
+            queryval = "update neighborhoods set neighborhood_name = \'" + new_value + "\' where neighborhood_name = \'" + orig_value + "\'"
+        _ = db.query(connection, queryval )
+
+    tables = ["Districts", "Neighborhoods"]
+    if tablename == "districts":
+        d_data = db.query(connection, "select district_name from districts order by district_name" )
+        d_data=[val[0] for val in d_data]
+        return render_template('update.html', tables=tables, table_data=d_data)
+    else:
+        n_data = db.query(connection, "select neighborhood_name from neighborhoods order by neighborhood_name" )
+        n_data=[val[0] for val in n_data]
+        return render_template('update.html', tables=tables, table_data=n_data)
+    # print(n_data)
+        
 
 @app.route('/compare')
 def compare_data():

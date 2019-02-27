@@ -3,7 +3,8 @@ import time
 
 def create_connection():
     try:
-        conn = psycopg2.connect(dbname='group_32', user='group_32', host='10.17.51.19', password='462-702-921', port='5432')
+        # conn = psycopg2.connect(dbname='group_32', user='group_32', host='10.17.51.19', password='462-702-921', port='5432')
+        conn = psycopg2.connect(dbname='group_32', user='group_32', host='10.237.27.10', password='462-702-921', port='5433')
         return conn
     except:
         print ("I am unable to connect to the database")
@@ -11,10 +12,14 @@ def create_connection():
 
 def query(conn, query):
     print(query)
+    rows = None
     cur = conn.cursor()
     start_time = time.time()
     cur.execute(query)
     stop_time = time.time()
-    rows = cur.fetchall()
+    try:
+        rows = cur.fetchall()
+    except:
+        pass
     print("Time taken: ", str(stop_time - start_time), "seconds")
     return rows
