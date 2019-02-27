@@ -212,6 +212,7 @@ def slicendice(category):
     dropdown_data = []
     fields = ["year","district_name","neighborhood_name","age"]
     if category == "deaths":
+        print("in deaths")
         if request.args:
             query_cons = "select " + ", ".join(fields) + " from deaths_v where "
             print(request.args.getlist('year'))
@@ -229,6 +230,336 @@ def slicendice(category):
             sample = db.query(connection, "select " + ", ".join(fields) + " from deaths_v limit 10")
         for field in fields:
             inter_data = db.query(connection, "select distinct(" + field + ") from deaths_v order by " + field )
+            mapped_data = list(map(lambda x: x[0], inter_data))
+            dropdown_data.append({field: mapped_data})
+            # TODO: Replace with * ?
+    elif category=="births":
+        fields = ["year","district_name","neighborhood_name","gender"]
+        print("in births")
+        if request.args:
+            query_cons = "select " + ", ".join(fields) + " from births_v where "
+            print(request.args.getlist('year'))
+            for i in request.args:
+                l = request.args.getlist(i)
+                # print(v)
+                # print(request.args.get(i))
+                bracket_value = (', '.join("'" + item + "'" for item in l))
+                print(bracket_value)
+                query_cons += i + " in (" + bracket_value + ") and "
+            query_cons += "1=1"
+            print(query_cons)
+            sample = db.query(connection, query_cons)            
+        else:
+            sample = db.query(connection, "select " + ", ".join(fields) + " from births_v limit 10")
+        for field in fields:
+            inter_data = db.query(connection, "select distinct(" + field + ") from births_v order by " + field )
+            mapped_data = list(map(lambda x: x[0], inter_data))
+            dropdown_data.append({field: mapped_data})
+            # TODO: Replace with * ?
+    elif category=="imm_emi_by_age":
+        fields = ["year","district_name","neighborhood_name","age","count_Immigrants","count_Emigrants"]
+        print("in imm_emi_by_age")
+        if request.args:
+            query_cons = "select " + ", ".join(fields) + " from immigrants_emigrants_by_age_v where "
+            print(request.args.getlist('year'))
+            for i in request.args:
+                l = request.args.getlist(i)
+                # print(v)
+                # print(request.args.get(i))
+                bracket_value = (', '.join("'" + item + "'" for item in l))
+                print(bracket_value)
+                query_cons += i + " in (" + bracket_value + ") and "
+            query_cons += "1=1"
+            print(query_cons)
+            sample = db.query(connection, query_cons)            
+        else:
+            sample = db.query(connection, "select " + ", ".join(fields) + " from immigrants_emigrants_by_age_v limit 10")
+        for field in fields:
+            inter_data = db.query(connection, "select distinct(" + field + ") from immigrants_emigrants_by_age_v order by " + field )
+            mapped_data = list(map(lambda x: x[0], inter_data))
+            dropdown_data.append({field: mapped_data})
+            # TODO: Replace with * ?
+    elif category=="imm_emi_by_gender":
+        fields = ["year","district_name","neighborhood_name","gender","count_Immigrants","count_Emigrants"]
+        print("in imm_emi_by_age")
+        if request.args:
+            query_cons = "select " + ", ".join(fields) + " from immigrants_emigrants_by_gender_v where "
+            print(request.args.getlist('year'))
+            for i in request.args:
+                l = request.args.getlist(i)
+                # print(v)
+                # print(request.args.get(i))
+                bracket_value = (', '.join("'" + item + "'" for item in l))
+                print(bracket_value)
+                query_cons += i + " in (" + bracket_value + ") and "
+            query_cons += "1=1"
+            print(query_cons)
+            sample = db.query(connection, query_cons)            
+        else:
+            sample = db.query(connection, "select " + ", ".join(fields) + " from immigrants_emigrants_by_gender_v limit 10")
+        for field in fields:
+            inter_data = db.query(connection, "select distinct(" + field + ") from immigrants_emigrants_by_gender_v order by " + field )
+            mapped_data = list(map(lambda x: x[0], inter_data))
+            dropdown_data.append({field: mapped_data})
+            # TODO: Replace with * ?
+    elif category=="immigrants_by_nationality":
+        fields = ["year","district_name","neighborhood_name","nationality","count"]
+        print("in immigrants_by_nationality")
+        if request.args:
+            query_cons = "select " + ", ".join(fields) + " from immigrants_by_nationality_v where "
+            print(request.args.getlist('year'))
+            for i in request.args:
+                l = request.args.getlist(i)
+                # print(v)
+                # print(request.args.get(i))
+                bracket_value = (', '.join("'" + item + "'" for item in l))
+                print(bracket_value)
+                query_cons += i + " in (" + bracket_value + ") and "
+            query_cons += "1=1"
+            print(query_cons)
+            sample = db.query(connection, query_cons)            
+        else:
+            sample = db.query(connection, "select " + ", ".join(fields) + " from immigrants_by_nationality_v limit 10")
+        for field in fields:
+            inter_data = db.query(connection, "select distinct(" + field + ") from immigrants_by_nationality_v order by " + field )
+            mapped_data = list(map(lambda x: x[0], inter_data))
+            dropdown_data.append({field: mapped_data})
+            # TODO: Replace with * ?
+    elif category=="population":
+        fields = ["year","district_name","neighborhood_name","gender","age","count"]
+        print("in immigrants_by_nationality")
+        if request.args:
+            query_cons = "select " + ", ".join(fields) + " from population_v where "
+            print(request.args.getlist('year'))
+            for i in request.args:
+                l = request.args.getlist(i)
+                # print(v)
+                # print(request.args.get(i))
+                bracket_value = (', '.join("'" + item + "'" for item in l))
+                print(bracket_value)
+                query_cons += i + " in (" + bracket_value + ") and "
+            query_cons += "1=1"
+            print(query_cons)
+            sample = db.query(connection, query_cons)            
+        else:
+            sample = db.query(connection, "select " + ", ".join(fields) + " from population_v limit 10")
+        for field in fields:
+            inter_data = db.query(connection, "select distinct(" + field + ") from population_v order by " + field )
+            mapped_data = list(map(lambda x: x[0], inter_data))
+            dropdown_data.append({field: mapped_data})
+            # TODO: Replace with * ?
+    elif category=="accidents":
+        fields = ["district_name","neighborhood_name","street","weekday","month","day","Mild_injuries","Serious_injuries","Victims","Vehicles_involved"]
+        print("in accidents")
+        if request.args:
+            query_cons = "select " + ", ".join(fields) + " from accidents_v where "
+            print(request.args.getlist('year'))
+            for i in request.args:
+                l = request.args.getlist(i)
+                # print(v)
+                # print(request.args.get(i))
+                bracket_value = (', '.join("'" + item + "'" for item in l))
+                print(bracket_value)
+                if(i=="month" or i=="weekday"):
+                    query_cons += "trim("+i+") " + " in (" + bracket_value + ") and "
+                else:
+                    query_cons += i + " in (" + bracket_value + ") and "
+            query_cons += "1=1"
+            print(query_cons)
+            sample = db.query(connection, query_cons)            
+        else:
+            sample = db.query(connection, "select " + ", ".join(fields) + " from accidents_v limit 10")
+        for field in fields:
+            inter_data = db.query(connection, "select distinct(" + field + ") from accidents_v order by " + field )
+            mapped_data = list(map(lambda x: x[0], inter_data))
+            dropdown_data.append({field: mapped_data})
+            # TODO: Replace with * ?
+    elif category=="unemployment":
+        fields = ["year","month","district_name","neighborhood_name","gender","demand_occupation","count"]
+        print("in Unemployment")
+        if request.args:
+            query_cons = "select " + ", ".join(fields) + " from unemployment_v where "
+            print(request.args.getlist('year'))
+            for i in request.args:
+                l = request.args.getlist(i)
+                # print(v)
+                # print(request.args.get(i))
+                bracket_value = (', '.join("'" + item + "'" for item in l))
+                print(bracket_value)
+                if(i=="month"):
+                    query_cons += "trim("+i+") " + " in (" + bracket_value + ") and "
+                else:
+                    query_cons += i + " in (" + bracket_value + ") and "
+                
+            query_cons += "1=1"
+            print(query_cons)
+            sample = db.query(connection, query_cons)            
+        else:
+            sample = db.query(connection, "select " + ", ".join(fields) + " from unemployment_v limit 10")
+        for field in fields:
+            inter_data = db.query(connection, "select distinct(" + field + ") from unemployment_v order by " + field )
+            mapped_data = list(map(lambda x: x[0], inter_data))
+            dropdown_data.append({field: mapped_data})
+            # TODO: Replace with * ?
+    elif category=="air_stations":
+        fields = ["name","Longitude","Latitude","Ubication","district_name","neighborhood_name"]
+        print("in air_stations")
+        if request.args:
+            query_cons = "select " + ", ".join(fields) + " from air_stations_v where "
+            print(request.args.getlist('year'))
+            for i in request.args:
+                l = request.args.getlist(i)
+                # print(v)
+                # print(request.args.get(i))
+                bracket_value = (', '.join("'" + item + "'" for item in l))
+                print(bracket_value)
+                if(i=="fgf"):
+                    query_cons += "trim("+i+") " + " in (" + bracket_value + ") and "
+                else:
+                    query_cons += i + " in (" + bracket_value + ") and "
+                
+            query_cons += "1=1"
+            print(query_cons)
+            sample = db.query(connection, query_cons)            
+        else:
+            sample = db.query(connection, "select " + ", ".join(fields) + " from air_stations_v limit 10")
+        for field in fields:
+            inter_data = db.query(connection, "select distinct(" + field + ") from air_stations_v order by " + field )
+            mapped_data = list(map(lambda x: x[0], inter_data))
+            dropdown_data.append({field: mapped_data})
+            # TODO: Replace with * ?
+    elif category=="most_frequent_baby_names":
+        fields = ["name","gender","year","frequency"]
+        print("in most_frequent_baby_names")
+        if request.args:
+            query_cons = "select " + ", ".join(fields) + " from most_frequent_baby_names where "
+            print(request.args.getlist('year'))
+            for i in request.args:
+                l = request.args.getlist(i)
+                # print(v)
+                # print(request.args.get(i))
+                bracket_value = (', '.join("'" + item + "'" for item in l))
+                print(bracket_value)
+                if(i=="fgf"):
+                    query_cons += "trim("+i+") " + " in (" + bracket_value + ") and "
+                else:
+                    query_cons += i + " in (" + bracket_value + ") and "
+                
+            query_cons += "1=1"
+            print(query_cons)
+            sample = db.query(connection, query_cons)            
+        else:
+            sample = db.query(connection, "select " + ", ".join(fields) + " from most_frequent_baby_names limit 10")
+        for field in fields:
+            inter_data = db.query(connection, "select distinct(" + field + ") from most_frequent_baby_names order by " + field )
+            mapped_data = list(map(lambda x: x[0], inter_data))
+            dropdown_data.append({field: mapped_data})
+            # TODO: Replace with * ?
+    elif category=="most_frequent_names":
+        fields = ["name","gender","decade","frequency"]
+        print("in most_frequent_names")
+        if request.args:
+            query_cons = "select " + ", ".join(fields) + " from most_frequent_names where "
+            print(request.args.getlist('year'))
+            for i in request.args:
+                l = request.args.getlist(i)
+                # print(v)
+                # print(request.args.get(i))
+                bracket_value = (', '.join("'" + item + "'" for item in l))
+                print(bracket_value)
+                if(i=="fgf"):
+                    query_cons += "trim("+i+") " + " in (" + bracket_value + ") and "
+                else:
+                    query_cons += i + " in (" + bracket_value + ") and "
+                
+            query_cons += "1=1"
+            print(query_cons)
+            sample = db.query(connection, query_cons)            
+        else:
+            sample = db.query(connection, "select " + ", ".join(fields) + " from most_frequent_names limit 10")
+        for field in fields:
+            inter_data = db.query(connection, "select distinct(" + field + ") from most_frequent_names order by " + field )
+            mapped_data = list(map(lambda x: x[0], inter_data))
+            dropdown_data.append({field: mapped_data})
+            # TODO: Replace with * ?
+    elif category=="transports":
+        fields = ["code","transport","Longitude","Latitude","station","district_name","neighborhood_name"]
+        print("in transports")
+        if request.args:
+            query_cons = "select " + ", ".join(fields) + " from transports_v where "
+            print(request.args.getlist('year'))
+            for i in request.args:
+                l = request.args.getlist(i)
+                # print(v)
+                # print(request.args.get(i))
+                bracket_value = (', '.join("'" + item + "'" for item in l))
+                print(bracket_value)
+                if(i=="fgf"):
+                    query_cons += "trim("+i+") " + " in (" + bracket_value + ") and "
+                else:
+                    query_cons += i + " in (" + bracket_value + ") and "
+                
+            query_cons += "1=1"
+            print(query_cons)
+            sample = db.query(connection, query_cons)            
+        else:
+            sample = db.query(connection, "select " + ", ".join(fields) + " from transports_v limit 10")
+        for field in fields:
+            inter_data = db.query(connection, "select distinct(" + field + ") from transports_v order by " + field )
+            mapped_data = list(map(lambda x: x[0], inter_data))
+            dropdown_data.append({field: mapped_data})
+            # TODO: Replace with * ?
+    elif category=="air_quality":
+        fields = ["name","air_quality","Longitude","Latitude","O3_Hour","O3_quality","O3_value","NO2_Hour","NO2_quality","NO2_value","PM10_Hour","PM10_quality","PM10_value","generated"]
+        print("in air_quality")
+        if request.args:
+            query_cons = "select " + ", ".join(fields) + " from air_quality_v where "
+            print(request.args.getlist('year'))
+            for i in request.args:
+                l = request.args.getlist(i)
+                # print(v)
+                # print(request.args.get(i))
+                bracket_value = (', '.join("'" + item + "'" for item in l))
+                print(bracket_value)
+                if(i=="fgf"):
+                    query_cons += "trim("+i+") " + " in (" + bracket_value + ") and "
+                else:
+                    query_cons += i + " in (" + bracket_value + ") and "
+                
+            query_cons += "1=1"
+            print(query_cons)
+            sample = db.query(connection, query_cons)            
+        else:
+            sample = db.query(connection, "select " + ", ".join(fields) + " from air_quality_v limit 10")
+        for field in fields:
+            inter_data = db.query(connection, "select distinct(" + field + ") from air_quality_v order by " + field )
+            mapped_data = list(map(lambda x: x[0], inter_data))
+            dropdown_data.append({field: mapped_data})
+            # TODO: Replace with * ?
+    elif category=="bus_stops":
+        fields = ["code","transport","Longitude","Latitude","bus_stop","district_name","neighborhood_name"]
+        print("in bus_stop")
+        if request.args:
+            query_cons = "select " + ", ".join(fields) + " from bus_stops_v where "
+            print(request.args.getlist('year'))
+            for i in request.args:
+                l = request.args.getlist(i)
+                # print(v)
+                # print(request.args.get(i))
+                bracket_value = (', '.join("'" + item + "'" for item in l))
+                print(bracket_value)
+                if(i=="fgf"):
+                    query_cons += "trim("+i+") " + " in (" + bracket_value + ") and "
+                else:
+                    query_cons += i + " in (" + bracket_value + ") and "
+                
+            query_cons += "1=1"
+            print(query_cons)
+            sample = db.query(connection, query_cons)            
+        else:
+            sample = db.query(connection, "select " + ", ".join(fields) + " from bus_stops_v limit 10")
+        for field in fields:
+            inter_data = db.query(connection, "select distinct(" + field + ") from bus_stops_v order by " + field )
             mapped_data = list(map(lambda x: x[0], inter_data))
             dropdown_data.append({field: mapped_data})
             # TODO: Replace with * ?
