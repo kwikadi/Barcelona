@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 
 import db
 import random
@@ -6,14 +6,31 @@ import json
 
 app = Flask(__name__)
 connection = db.create_connection()
-
+admin_access = 0
 
 def getRandomColor():
     return "#%06x" % random.randint(0, 0xFFFFFF)
 
 @app.route('/')
 def landing():
-    return render_template("index.html")
+    return render_template("index.html", admin=admin_access)
+
+@app.route('/logout')
+def logout():
+    global admin_access
+    admin_access = 0
+    return redirect(url_for('landing'))
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        print("HELLO", request.form['username'])
+        if request.form['username'] == "admin" and request.form['password'] == "admin":
+            global admin_access
+            admin_access = 1
+            return redirect(url_for('landing'))
+    else:
+        return render_template('login.html')
 
 
 @app.route('/compare')
