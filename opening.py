@@ -605,6 +605,30 @@ def slicendice(category):
     return render_template("slice.html", data=dropdown_data, sample=sample, page=category )
 
 
-@app.route('/agg')
-def aggregate():
-    return render_template("index.html")
+@app.route('/agg/<table>')
+def aggregate1(table):
+	print("second")
+	tables = ['Births','Deaths','Accidents','Air_Quality','Immigrants_by_nationality','Immigrants_Emigrants_by_age','Immigrants_Emigrants_by_gender','Population','Unemployment']
+	operators = ['Max','Min','Avg','Sum']
+
+	births_col = ['year','count']
+	deaths_col = ['year','count']
+	accidents_col = ['victims','vehicles_involved']
+	air_quality_col = ['o3_value','no2_value','pm10_value']
+	immigrants_by_nationality_col = ['count']
+	immigrants_emigrants_by_age_col = ['count_immigrants','count_emigrants']
+	immigrants_emigrants_by_gender_col = ['count_immigrants','count_emigrants']
+	population_col = ['count']
+	unemployment_col = ['count']
+
+
+	dropdown_data = []
+	if request.args:
+		query_cons = "select "+ request.args.get('operator') + "("+ request.args.get('column') + ") from " + table + "_v where 1=1"
+		print(query_cons)
+		sample = db.query(connection, query_cons)            
+	else:
+		print("default")
+		sample = db.query(connection, "select * from births_v limit 10")
+	
+	return render_template('agg.html', tables=tables, deaths_col=deaths_col, births_col=births_col, accidents_col=accidents_col, air_quality_col=air_quality_col,immigrants_by_nationality_col=immigrants_by_nationality_col,immigrants_emigrants_by_age_col=immigrants_emigrants_by_age_col,immigrants_emigrants_by_gender_col=immigrants_emigrants_by_gender_col,population_col=population_col,unemployment_col=unemployment_col, operators=operators, data=dropdown_data, sample=sample,)
